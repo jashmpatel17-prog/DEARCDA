@@ -1,0 +1,74 @@
+ASCENDING ORDER
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+ARR DB 34, 12, 56, 9, 21      ; 5 ELEMENTS TO BE SORTED
+N   DB 5
+
+.CODE
+MAIN:
+    MOV CX, 4                ; OUTER LOOP COUNT = N - 1
+
+OUTER_LOOP:
+    MOV SI, 0                ; START INDEX
+    MOV BX, CX               ; INNER LOOP COUNT
+
+INNER_LOOP:
+    MOV AL, ARR[SI]
+    CMP AL, ARR[SI+1]
+    JBE NO_SWAP
+
+    ; SWAP ARR[SI] AND ARR[SI+1]
+    MOV AH, ARR[SI+1]
+    MOV ARR[SI], AH
+    MOV ARR[SI+1], AL
+
+NO_SWAP:
+    INC SI
+    DEC BX
+    JNZ INNER_LOOP
+
+    DEC CX
+    JNZ OUTER_LOOP
+
+DESCENDING ORDER
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+ARR DB 34, 12, 56, 9, 21     ; INPUT ARRAY (5 BYTES)
+N   DB 5                    ; NUMBER OF ELEMENTS
+
+.CODE
+MAIN:
+    MOV AX, @DATA
+    MOV DS, AX
+
+    MOV CX, 4               ; OUTER LOOP (N - 1) = 5 - 1 = 4
+
+OUTER_LOOP:
+    MOV SI, 0               ; START INDEX
+    MOV BX, CX              ; INNER LOOP COUNT
+
+INNER_LOOP:
+    MOV AL, ARR[SI]         ; AL = ARR[SI]
+    MOV AH, ARR[SI+1]       ; AH = ARR[SI+1]
+    CMP AL, AH
+    JA NO_SWAP              ; IF ARR[SI] > ARR[SI+1], NO SWAP
+
+    ; SWAP ARR[SI] AND ARR[SI+1]
+    MOV ARR[SI], AH
+    MOV ARR[SI+1], AL
+
+NO_SWAP:
+    INC SI
+    DEC BX
+    JNZ INNER_LOOP
+
+    DEC CX
+    JNZ OUTER_LOOP
+
+EXIT:
+    MOV AH, 4CH
+    INT 21H
